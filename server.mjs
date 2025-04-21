@@ -22,8 +22,13 @@ app.get("/", (req, res) => {
   res.send("Welcome to the Fruit API");
 });
 
-app.get("/api/fruits", (req, res) => {
-  res.send(fruits);
+app.get("/api/fruits", async (req, res) => {
+  try {
+    const fruits = await Fruit.find();
+    res.json(fruits);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 app.post("api/fruits", (res, req) => {
@@ -35,6 +40,41 @@ app.post("api/fruits", (res, req) => {
   Fruit.create(req.body, (error, createdFruit) => {
     res.send(createdFruit);
   });
+});
+
+// Seed the database
+app.get("/api/fruits/seed", async (req, res) => {
+  try {
+    await Fruit.create([
+      {
+        name: "grapefruit",
+        color: "pink",
+        readyToEat: true,
+      },
+      {
+        name: "grape",
+        color: "purple",
+        readyToEat: false,
+      },
+      {
+        name: "avocado",
+        color: "green",
+        readyToEat: true,
+      },
+    ]);
+    res.redirect("/api/fruits");
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+app.get("/api/fruits/:id", async (req, res) => {
+  try {
+    const fruit = await Fruit.findById(req.params.id);
+    res.json(fruit);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 // Server
