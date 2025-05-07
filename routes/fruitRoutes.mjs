@@ -33,15 +33,15 @@ router.delete("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   console.log(req.body);
   try {
-    if (req.body.readyToEat) {
-      req.body.readyToEat === "on"
-        ? (req.body.readyToEat = true) //do some data correction
-        : (req.body.readyToEat = false); //do some data correction
-    }
-    // fruits.push(req.body);
+    // if (req.body.readyToEat) {
+    //   req.body.readyToEat === 'on'
+    //     ? (req.body.readyToEat = true) //do some data correction
+    //     : (req.body.readyToEat = false); //do some data correction
+    // }
+    //fruits.push(req.body);
     await Fruit.findByIdAndUpdate(req.params.id, req.body);
 
-    res.redirect(303, "/");
+    res.json(req.body);
   } catch (error) {
     console.log(error);
   }
